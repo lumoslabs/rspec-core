@@ -27,7 +27,12 @@ module RSpec
     class Metadata < Hash
 
       def self.relative_path(line)
-        line = line.sub(File.expand_path("."), ".")
+        line = begin
+          line.sub(File.expand_path("."), ".")
+        rescue => ex
+          "[EXPAND_PATH_ERROR] #{line}"
+        end
+
         line = line.sub(/\A([^:]+:\d+)$/, '\\1')
         return nil if line == '-e:1'
         line
